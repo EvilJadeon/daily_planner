@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  client:
+    image: daily_planner
+    command: rails s -b 0.0.0.0
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src
+    depends_on:
+      - db
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    tty: true
+    stdin_open: true
+
+  db:
+    image: postgres:11.5
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+
+volumes:
+  postgres:
+  redis:
